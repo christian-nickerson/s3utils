@@ -1,7 +1,12 @@
 # S3 Utils
 Utility functions for reading, writing and working with data in S3 data sotres via the S3 API.
 
-## Install guide
+# Contents
+1. [Install Guide](#install)
+2. [Getting Started](#getting_started)
+3. [Project Structure](#structure)
+
+## Install Guide <a name="install"></a>
 1. Open the Terminal and run the following (replace paths with your own):
     ``` bash
     $ cd YOUR/PROJECT/DIRECTORY
@@ -21,8 +26,7 @@ Utility functions for reading, writing and working with data in S3 data sotres v
     $ pip install s3_utils/
     ```
 
-## Getting started
-
+## Getting Started <a name="getting_started"></a>
 to Instantiate the class:
 ``` python
 from s3 import S3
@@ -61,10 +65,10 @@ df = DataFrame() # replace with your DataFrame to be written
 s3_bucket = 'YOUR-BUCKET-NAME'
 s3_path = 'YOUR/BUCKET/FILE/PATH/FILENAME.csv'
 
-df = s3.to_csv(s3_bucket, s3_path)
+s3.to_csv(df, s3_bucket, s3_path)
 ```
 
-## Project Structure
+## Project Structure <a name="structure"></a>
 The project is built on the factory design pattern. The ```s3.py``` is the contains the factory class. The base and sub-classes are under the ```funcs/``` folder.
 
 To extend the class:
