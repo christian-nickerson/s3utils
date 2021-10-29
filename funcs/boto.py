@@ -42,7 +42,7 @@ class BotoFuncs(S3Base):
         :param s3_path: S3 prefix to upload to
         :param local_path: Local path to upload file from
         """
-        self.boto.Bucket(s3_bucket).upload_file(s3_path, local_path)
+        self.boto_client.upload_file(local_path, s3_bucket, s3_path)
         return os.remove(local_path)
 
     def download_file(self, s3_bucket: str, s3_path: str, local_path: str) -> None:

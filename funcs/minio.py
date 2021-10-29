@@ -24,7 +24,7 @@ class MinioFuncs(S3Base):
                             secure = ssl
                         )
 
-    def ll(self, s3_bucket: str, s3_path: str) -> DataFrame:
+    def ll(self, s3_bucket: str, s3_path: str = None) -> DataFrame:
         """ Create a DataFrame of items in MinIO.
 
         :param s3_bucket: Name of MinIO bucket to list objects from
