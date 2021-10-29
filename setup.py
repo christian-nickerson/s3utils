@@ -14,6 +14,7 @@ setup(
         'pyarrow==6.0.0',
         'pandas==1.3.4',
         'minio==7.1.1',
-        'moto==2.2.11'
+        'moto==2.2.11',
+        'testcontainer-python-minio==0.2.0'
     ]
 )
