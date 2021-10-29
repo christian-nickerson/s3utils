@@ -1,7 +1,7 @@
 from moto import mock_s3
 from funcs.boto import BotoFuncs
-from os import listdir, remove
-from os.path import isfile, join
+from os import listdir, mkdir, remove
+from os.path import isfile, isdir, join
 import unittest
 import boto3
 import json
@@ -22,6 +22,8 @@ class TestBotoFuncs(unittest.TestCase):
         self.resource = boto3.resource('s3')
         self.resource.create_bucket(Bucket = bucket_name)
         self.bucket = self.resource.Bucket(bucket_name)
+        if not isdir(test_temp_folder):
+            mkdir(test_temp_folder)
         with open(join(test_temp_folder, test_json_name), 'w') as f:
             json.dump(test_data, f)
 
