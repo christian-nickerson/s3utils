@@ -1,69 +1,63 @@
-# S3 Utils
+# S3Utils
 Utility functions for reading, writing and working with data in S3 data sotres via the S3 API.
 
 # Contents
 1. [Install Guide](#install)
 2. [Getting Started](#getting_started)
-3. [Project Structure](#structure)
 
 ## Install Guide <a name="install"></a>
-1. Open the Terminal and run the following (replace paths with your own):
-    ``` bash
-    $ cd YOUR/PROJECT/DIRECTORY
+To install S3Utils, open the terminal and run the following:
+``` zsh
+cd YOUR/PROJECT/DIRECTORY
 
-    $ git submodule add https://github.com/christian-nickerson/s3_utils s3_utils
-    ```
-
-2. Create and insitialise virtual environment:
-    ``` bash
-    $ python3 -m venv env
-
-    $ source env/bin/activate
-    ```
-
-3. Pip install library into your virtual environment:
-    ``` bash
-    $ pip install s3_utils/
-    ```
+pip install git+https://github.com/christian-nickerson/s3utils
+```
 
 ## Getting Started <a name="getting_started"></a>
-to Instantiate the class:
+S3Utils can either use inherited IAM roles or keys and secrets for autheticating against S3 & MinIO.
+
+To use with IAM roles:
 ``` python
-from s3 import S3
+from s3utils import S3
+s3 = S3(use_keys = False, ssl = True)
+``` 
 
-aws_access_key_id = 'xxxx-xxxx-xxxx-xxxx'
-aws_secret_access_key = 'xxxx-xxxx-xxxx-xxxx'
-endpoint_url = 'https://YOUR-S3-URL'
+To use keys & secrets, S3Utils looks for specific enviornment variables. For security, consider supplying in a `.env` file and using a library such as [python-dotenv](https://pypi.org/project/python-dotenv/) to load keys & secrets into your environment.
+``` python
+from s3utils import S3
+from dotenv import load_dotenv
+load_dotenv()
 
-s3 = S3(   
-    aws_access_key_id = aws_access_key_id,
-    aws_secret_access_key = aws_secret_access_key,
-    endpoint_url = endpoint_url
-)
+# S3Utils will look for the following if use_keys = True:
+# 'AWS_ACCESS_KEY_ID'
+# 'AWS_SECRET_ACCESS_KEY'
+# 'ENDPOINT_URL'
+
+s3 = S3(use_keys = True, ssl = False)
 ``` 
 
 To download a file from an S3 data store to your local directory:
 ``` python
-s3_bucket = 'YOUR-BUCKET-NAME'
-s3_path = 'YOUR/BUCKET/FILE/PATH'
+bucket_name = 'YOUR-BUCKET-NAME'
+key = 'YOUR/OBJECT/KEY'
 local_path = 'YOUR/LOCAL/PATH'
 
-s3.download_file(s3_bucket, s3_path, local_path)
+s3.download_file(bucket_name, key, local_path)
 ```
 
 To read a parquet file directly from S3 data store:
 ``` python
-s3_bucket = 'YOUR-BUCKET-NAME'
-s3_path = 'YOUR/BUCKET/FILE/PATH'
+bucket_name = 'YOUR-BUCKET-NAME'
+key = 'YOUR/OBJECT/KEY'
 
-df = s3.read_parquet(s3_bucket, s3_path)
+df = s3.read_parquet(bucket_name, key)
 ```
 
 To write a csv from a dataframe directly to S3:
 ``` python
 df = DataFrame() # replace with your DataFrame to be written
-s3_bucket = 'YOUR-BUCKET-NAME'
-s3_path = 'YOUR/BUCKET/FILE/PATH/FILENAME.csv'
+bucket_name = 'YOUR-BUCKET-NAME'
+key = 'YOUR/OBJECT/KEYFILENAME.csv'
 
-s3.to_csv(df, s3_bucket, s3_path)
+s3.to_csv(df, bucket_name, key)
 ```
