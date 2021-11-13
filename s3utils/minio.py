@@ -1,28 +1,33 @@
-from funcs.base import S3Base
+from s3utils.base import S3Base
 from minio import Minio
 from pandas.core.frame import DataFrame
+from os import getenv
 import pandas as pd
 
 class MinioFuncs(S3Base):
 
-    def __init__(   self, 
-                    aws_access_key_id: str, 
-                    aws_secret_access_key: str, 
-                    endpoint_url: str, 
-                    ssl: bool
-                ) -> None:
-        """ Connect to MinIO using Minio fucntions.
+    def __init__(self, use_keys: bool, ssl: bool) -> None:
+        """ MinIO API functions from Minio.
 
-        :param aws_access_key_id: AWS access key ID
-        :param aws_secret_access_key: AWS access secret
-        :param endpoint_url: S3 endpoint URL
-        :param ssl: Boolean flag to use SSL encryption
+        :param use_keys: Boolean flag to use keys and secret from env variables.
+        :param ssl: Boolean flag to use SSL encryption.
         """
-        self.minio = Minio( endpoint = endpoint_url.replace("http://",""),
-                            access_key = aws_access_key_id,
-                            secret_key = aws_secret_access_key,
-                            secure = ssl
-                        )
+        self.ssl = ssl
+        self.use_keys = use_keys
+        self._connect_minio()
+        super().__init__()
+
+    def _connect_minio(self) -> None:
+        """ Connect to S3 using boto3. """
+        if not self.use_keys:
+            self.minio = Minio('s3.amazonaws.com', secure = self.ssl)
+        else: 
+            self.minio = Minio( 
+                endpoint = getenv('ENDPOINT_URL').replace("http://",""),
+                access_key = getenv('AWS_ACCESS_KEY_ID'),
+                secret_key = getenv('AWS_SECRET_ACCESS_KEY'),
+                secure = self.ssl
+            )
 
     def ll(self, s3_bucket: str, s3_path: str = None) -> DataFrame:
         """ Create a DataFrame of items in MinIO.

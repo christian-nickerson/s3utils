@@ -1,4 +1,4 @@
-from funcs.base import S3Base
+from s3utils.base import S3Base
 from s3fs import S3FileSystem
 from pandas.core.frame import DataFrame
 from gzip import GzipFile
@@ -11,25 +11,28 @@ import os
 
 class S3fsFuncs(S3Base):
 
-    def __init__(   self, 
-                    aws_access_key_id: str, 
-                    aws_secret_access_key: str, 
-                    endpoint_url: str, 
-                    ssl: bool
-                ) -> None:
-        """ Connect to S3 using S3FileSystem funcstions.
+    def __init__(self, use_keys: bool, ssl: bool) -> None:
+        """ S3 API functions from S3FileSystem.
 
-        :param aws_access_key_id: AWS access key ID
-        :param aws_secret_access_key: AWS access secret
-        :param endpoint_url: S3 endpoint URL
-        :param ssl: Boolean flag to use SSL encryption
+        :param use_keys: Boolean flag to use keys and secret from env variables.
+        :param ssl: Boolean flag to use SSL encryption.
         """
-        self.s3fs = S3FileSystem(   anon = False,
-                                    key = aws_access_key_id,
-                                    secret = aws_secret_access_key,
-                                    use_ssl = ssl,
-                                    client_kwargs = {'endpoint_url' : endpoint_url}
-                                )
+        self.ssl = ssl
+        self.use_keys = use_keys
+        self._connect_s3fs()
+        super().__init__(use_keys, ssl)
+
+    def _connect_s3fs(self) -> None:
+        """ Connect to S3 using boto3. """
+        if not self.use_keys:
+            self.s3fs = S3FileSystem(anon = False, use_ssl = self.ssl)
+        else: 
+            self.s3fs = S3FileSystem(anon = False,
+                key = os.getenv('AWS_ACCESS_KEY_ID'),
+                secret = os.getenv('AWS_SECRET_ACCESS_KEY'),
+                client_kwargs = {'endpoint_url' : os.getenv('ENDPOINT_URL')},
+                use_ssl = self.ssl
+            )
 
     def obj_exists(self, s3_bucket: str, s3_path: str) -> None:
         """ Check if file exists.
