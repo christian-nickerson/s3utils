@@ -1,4 +1,4 @@
-name: Python CI testing
+name: Python CI Testing
 
 on:
   push:
@@ -29,4 +29,4 @@ jobs:
     - name: Run tests
       run: |
         coverage run -m unittest discover tests/unittests
-        coverage-badge
+        coverage-badge -o coverage.svg
