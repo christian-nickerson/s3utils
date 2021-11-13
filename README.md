@@ -1,5 +1,4 @@
 ![Python CI Testing](https://github.com/christian-nickerson/s3utils/actions/workflows/python-ci.yml/badge.svg)
-![coverage](https://github.com/christian-nickerson/s3utils/coverage.svg)
 
 # S3Utils
 Utility functions for reading, writing and working with data in S3 data sotres via the S3 API.
