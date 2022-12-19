@@ -13,29 +13,12 @@ class S3fsFuncs:
 
     """S3 Filesystem read and write functions"""
 
-    def __init__(self, use_keys: bool, ssl: bool) -> None:
+    def __init__(self, ssl: bool) -> None:
         """S3 API functions from S3FileSystem.
 
-        :param use_keys: Boolean flag to use keys and secret from env variables.
         :param ssl: Boolean flag to use SSL encryption.
         """
-        self.ssl = ssl
-        self.use_keys = use_keys
-        self._connect_s3fs()
-        super().__init__(use_keys, ssl)
-
-    def _connect_s3fs(self) -> None:
-        """Connect to S3 using boto3."""
-        if not self.use_keys:
-            self.s3fs = S3FileSystem(anon=False, use_ssl=self.ssl)
-        else:
-            self.s3fs = S3FileSystem(
-                anon=False,
-                key=os.getenv("AWS_ACCESS_KEY_ID"),
-                secret=os.getenv("AWS_SECRET_ACCESS_KEY"),
-                client_kwargs={"endpoint_url": os.getenv("ENDPOINT_URL")},
-                use_ssl=self.ssl,
-            )
+        self.s3fs = S3FileSystem(anon=False, use_ssl=ssl)
 
     def obj_exists(self, s3_bucket: str, s3_path: str) -> None:
         """Check if file exists.
