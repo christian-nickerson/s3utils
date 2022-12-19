@@ -16,26 +16,12 @@ pip install git+https://github.com/christian-nickerson/s3utils
 ```
 
 ## Getting Started <a name="getting_started"></a>
-S3Utils can either use inherited IAM roles or keys and secrets for autheticating against S3 & MinIO.
+S3Utils can either use inherited IAM roles for autheticating against S3.
 
 To use with IAM roles:
 ``` python
 from s3utils import S3
-s3 = S3(use_keys = False, ssl = True)
-``` 
-
-To use keys & secrets, S3Utils looks for specific enviornment variables. For security, consider supplying in a `.env` file and using a library such as [python-dotenv](https://pypi.org/project/python-dotenv/) to load keys & secrets into your environment.
-``` python
-from s3utils import S3
-from dotenv import load_dotenv
-load_dotenv()
-
-# S3Utils will look for the following if use_keys = True:
-# 'AWS_ACCESS_KEY_ID'
-# 'AWS_SECRET_ACCESS_KEY'
-# 'ENDPOINT_URL'
-
-s3 = S3(use_keys = True, ssl = False)
+s3 = S3(ssl = True)
 ``` 
 
 To download a file from an S3 data store to your local directory:
