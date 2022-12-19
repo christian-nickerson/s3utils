@@ -1,5 +1,5 @@
-from s3utils.boto import *
-from s3utils.s3fs import *
+from s3utils.boto import BotoFuncs
+from s3utils.s3fs import S3fsFuncs
 
 
 class S3(BotoFuncs, S3fsFuncs):
@@ -11,4 +11,4 @@ class S3(BotoFuncs, S3fsFuncs):
 
         :param ssl: Boolean flag to use SSL encryption.
         """
-        super().__init__(ssl)
+        super().__init__(ssl=ssl)

@@ -14,17 +14,10 @@ class BotoFuncs:
         :param use_keys: Boolean flag to use keys and secret from env variables.
         :param ssl: Boolean flag to use SSL encryption.
         """
-        self.ssl = ssl
-        self.config = Config(connect_timeout=1000, retries={"max_attempts": 2}, signature_version="s3v4")
-        self._connect_boto()
-
-    def _connect_boto(self, config: Config) -> None:
-        """Connect to S3 using boto3.
-
-        :param config: Boto3 Config option
-        """
-        self.boto_client = boto3.client("s3", config=config, use_ssl=self.ssl)
-        self.boto_resource = boto3.resource("s3", config=config, use_ssl=self.ssl)
+        super().__init__(ssl)
+        config = Config(connect_timeout=1000, retries={"max_attempts": 2}, signature_version="s3v4")
+        self.boto_client = boto3.client("s3", config=config, use_ssl=ssl)
+        self.boto_resource = boto3.resource("s3", config=config, use_ssl=ssl)
 
     def upload_file(self, s3_bucket: str, s3_path: str, local_path: str) -> None:
         """Upload local file to S3.

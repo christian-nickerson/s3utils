@@ -13,11 +13,12 @@ class S3fsFuncs:
 
     """S3 Filesystem read and write functions"""
 
-    def __init__(self, ssl: bool) -> None:
+    def __init__(self, ssl: bool, **kwargs) -> None:
         """S3 API functions from S3FileSystem.
 
         :param ssl: Boolean flag to use SSL encryption.
         """
+        super().__init__(**kwargs)
         self.s3fs = S3FileSystem(anon=False, use_ssl=ssl)
 
     def obj_exists(self, s3_bucket: str, s3_path: str) -> None:
