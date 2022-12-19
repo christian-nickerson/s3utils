@@ -1,1 +1,1 @@
-from s3utils.s3 import S3
+from s3utils.client import S3
