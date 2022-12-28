@@ -7,7 +7,7 @@ name = "s3Utils"
 description = "Utility functions for working with files via S3 API"
 version = "0.1.0"
 readme = "README.md"
-requires-python = "3.9"
+requires-python = ">=3.9"
 authors = [
   {email = "christain_nickerson@hotmail.com"},
   {name = "Christian Nickerson"}
